@@ -8,7 +8,7 @@ This document provides a comprehensive overview of MySQL, including theory and p
 MySQL is an open-source RDBMS based on Structured Query Language (SQL). It stores data in tables and supports various operations such as data insertion, querying, updating, and schema modifications.
 
 ## 🔹 Order of Execution?
-```
+```sql
 /*(8)*/  SELECT /*9*/ DISTINCT /*11*/ TOP  
 /*(1)*/  FROM
  /*(3)*/        
