@@ -11,16 +11,14 @@ MySQL is an open-source RDBMS based on Structured Query Language (SQL). It store
 ```sql
 /*(8)*/  SELECT /*9*/ DISTINCT /*11*/ TOP  
 /*(1)*/  FROM
- /*(3)*/        
-JOIN
- /*(2)*/       
-ON
- /*(4)*/  WHERE
- /*(5)*/  GROUP BY
- /*(6)*/  WITH {CUBE | ROLLUP}
- /*(7)*/  HAVING
- /*(10)*/ ORDER BY
- /*(11)*/ LIMIT
+/*(3)*/  JOIN
+/*(2)*/  ON
+/*(4)*/  WHERE
+/*(5)*/  GROUP BY
+/*(6)*/  WITH {CUBE | ROLLUP}
+/*(7)*/  HAVING
+/*(10)*/ ORDER BY
+/*(11)*/ LIMIT
 ```
 ---
 
