@@ -7,6 +7,20 @@ This document provides a comprehensive overview of MySQL, including theory and p
 ## 🔹 What is MySQL?
 MySQL is an open-source RDBMS based on Structured Query Language (SQL). It stores data in tables and supports various operations such as data insertion, querying, updating, and schema modifications.
 
+## 🔹 Order of Execution?
+/*(8)*/  SELECT /*9*/ DISTINCT /*11*/ TOP  
+/*(1)*/  FROM
+ /*(3)*/        
+JOIN
+ /*(2)*/       
+ON
+ /*(4)*/  WHERE
+ /*(5)*/  GROUP BY
+ /*(6)*/  WITH {CUBE | ROLLUP}
+ /*(7)*/  HAVING
+ /*(10)*/ ORDER BY
+ /*(11)*/ LIMIT
+
 ---
 
 ## 🔹 Key MySQL Concepts
@@ -198,6 +212,173 @@ CREATE TABLE users (
 );
 ```
 
+---
+## 🔹Aggregate Functions
+Aggregate functions perform calculations on sets of values and return a single value:
+
+```sql
+-- Basic syntax:
+SELECT AGG_FUNC(column_name) FROM table_name [WHERE conditions];
+```
+### Common Aggregate Functions:
+- ```COUNT()``` : Counts rows
+  ```sql
+  	SELECT COUNT(*) FROM employees;
+  ```
+- ```SUM()``` : Sums values
+  ```sql
+  SELECT SUM(salary) FROM employees;
+  ```
+- ```AVG()```: Averages values
+  ```sql
+  SELECT AVG(salary) FROM employees;
+  ```
+- ```MIN()```: Finds minimum value
+  ```sql
+  SELECT MIN(salary) FROM employees;
+  ```
+- ```MAX()```: Finds maximum value
+  ```sql
+  SELECT MAX(salary) FROM employees;
+  ```
+- ```GROUP_CONCAT()```: Concatenates values
+  ```sql
+  SELECT GROUP_CONCAT(name) FROM employees;
+  ```
+### Conditional Aggregation:
+Conditional aggregation applies aggregate functions to specific subsets of data:
+
+- #### Using ```CASE``` inside aggregates
+  ```sql
+  SELECT 
+    SUM(CASE WHEN department = 'Sales' THEN salary ELSE 0 END) AS sales_payroll,
+    AVG(CASE WHEN gender = 'F' THEN salary ELSE NULL END) AS avg_female_salary
+  FROM employees;
+  ```
+- #### Using IF() function
+  ```sql
+  SELECT
+    SUM(IF(status = 'Active', salary, 0)) AS active_payroll,
+    COUNT(IF(joined_date > '2023-01-01', 1, NULL)) AS new_employees
+  FROM employees;
+  ```
+- #### Using FILTER (MySQL 8.0+)
+  ```sql
+  SELECT
+    SUM(salary) FILTER (WHERE department = 'IT') AS it_payroll,
+    AVG(salary) FILTER (WHERE years_experience > 5) AS senior_avg_salary
+  FROM employees;
+  ```
+- NULL Handling: Most aggregates ignore NULL values except COUNT(*)
+---
+
+## Window Functions in MySQL (8.0+)
+
+Window functions perform calculations across a set of table rows that are somehow related to the current row, without collapsing them into a single output row like GROUP BY does.
+
+### Basic Syntax:
+```sql
+SELECT 
+    column1,
+    column2,
+    WINDOW_FUNCTION() OVER (
+        [PARTITION BY partition_expression]
+        [ORDER BY sort_expression]
+        [frame_clause]
+    ) AS result_column
+FROM table_name;
+```
+### ROW_NUMBER()
+  - Assigns a unique sequential integer to rows within a partition of the result set
+  - example: Get the top-earning employee in each department.
+  - ```sql
+    SELECT 
+    employee_id, 
+    department_id, 
+    salary,
+    ROW_NUMBER() OVER (PARTITION BY department_id ORDER BY salary DESC) AS row_num
+    FROM employees;
+    ```
+### RANK() and DENSE_RANK()
+  - Both are window functions used to assign rankings to rows in a result set, but with different handling of ties
+  - ```sql
+    ```sql
+    SELECT 
+    column_name,
+    RANK() OVER (ORDER BY sort_column) AS rank_col,
+    DENSE_RANK() OVER (ORDER BY sort_column) AS dense_rank_col
+    FROM table_name;
+    ```
+  - #### RANK() Function:
+    - Assigns a unique rank to each distinct row
+    - Skips subsequent ranks after ties (creates gaps)
+    - Follows "Olympic medal" ranking style
+  - #### DENSE_RANK() Function:
+    - Assigns a unique rank to each distinct row
+    - Never skips ranks (no gaps after ties)
+    - Follows "sequential numbering" style
+### NTILE(n):
+  - Divides the result set into n buckets and assigns a bucket number to each row.
+  - ```sql
+    SELECT 
+    employee_id,
+    salary,
+    NTILE(4) OVER (ORDER BY salary DESC) AS salary_quartile
+    FROM employees;
+
+    ```
+ ### LAG() and LEAD():
+  - LAG() accesses data from a previous row.
+  - LEAD() accesses data from a following row.
+  - Use case: Compare current salary with previous and next employee's salary
+  - ```sql
+    SELECT 
+    employee_id, 
+    salary,
+    LAG(salary, 1) OVER (ORDER BY hire_date) AS prev_salary,
+    LEAD(salary, 1) OVER (ORDER BY hire_date) AS next_salary
+    FROM employees;
+
+    ```
+ ### FIRST_VALUE() and LAST_VALUE():
+  - FIRST_VALUE() returns the first value in the window.
+  - LAST_VALUE() returns the last value in the window.
+  - ```sql
+    SELECT 
+    employee_id,
+    salary,
+    FIRST_VALUE(salary) OVER (PARTITION BY department_id ORDER BY hire_date) AS first_salary,
+    LAST_VALUE(salary) OVER (PARTITION BY department_id ORDER BY hire_date 
+        ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS last_salary
+    FROM employees;
+    ```
+ ### Aggregate Functions as Window Functions
+  - Any aggregate function (like SUM, AVG, COUNT, MIN, MAX) can be used as a window function.
+  - ```sql
+    SELECT 
+    employee_id,
+    department_id,
+    salary,
+    AVG(salary) OVER (PARTITION BY department_id) AS avg_dept_salary,
+    SUM(salary) OVER (ORDER BY hire_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT       ROW) AS running_total
+    FROM employees;
+
+    ```
+ ### Window Frame Clauses
+   - ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+   - ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING
+   - RANGE BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING
+   - ```sql
+     SELECT 
+    employee_id,
+    salary,
+    SUM(salary) OVER (
+        ORDER BY hire_date 
+        ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+    ) AS moving_sum
+    FROM employees;
+
+     ```
 ---
 
 ## 🔹 Indexes in MySQL
