@@ -216,7 +216,7 @@ Indexes in MySQL are used to speed up the retrieval of rows from a table. They h
 
 ---
 
-### 🔸 Creating and Dropping Indexes
+###  Creating and Dropping Indexes
 
 ###  Create an Index
 
@@ -233,6 +233,28 @@ CREATE UNIQUE INDEX index_name ON table_name(column_name);
 -- Full-text index (for text-based searches)
 CREATE FULLTEXT INDEX index_name ON table_name(text_column);
 ```
+- Use composite indexes for queries filtering/sorting on multiple columns
+
+- Unique indexes prevent duplicate values in the indexed column(s)
+
+- Full-text indexes are optimized for MATCH() AGAINST() queries on large text fields
+
+- Index order matters in composite indexes (leftmost prefix principle)
+  
+###  Create an Index
+```sql
+-- Standard index
+DROP INDEX index_name ON table_name;
+
+-- Primary Key index (requires ALTER TABLE)
+ALTER TABLE table_name DROP PRIMARY KEY;
+```
+- Dropping indexes frees up storage space and reduces write overhead
+
+- Primary Key indexes cannot be dropped with DROP INDEX (use ALTER TABLE)
+
+- Dropping a non-existent index throws an error (check existence first)
+- 
 ---
 
 ## 🔹 Views
