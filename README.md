@@ -200,13 +200,13 @@ CREATE TABLE users (
 
 ---
 
-# 🔹 Indexes in MySQL
+## 🔹 Indexes in MySQL
 
 Indexes in MySQL are used to speed up the retrieval of rows from a table. They help optimize queries that use `SELECT`, `JOIN`, `WHERE`, `ORDER BY`, and `GROUP BY`. While indexes improve read performance, they can slightly degrade write performance (like `INSERT`, `UPDATE`, `DELETE`) due to the overhead of maintaining the index structure.
 
 ---
 
-## Why Use Indexes?
+### Why Use Indexes?
 - Improve the speed of data retrieval
 - Enhance performance of queries with conditions and joins
 - Enforce uniqueness using `UNIQUE` or `PRIMARY KEY`
@@ -216,9 +216,9 @@ Indexes in MySQL are used to speed up the retrieval of rows from a table. They h
 
 ---
 
-## 🔸 Creating and Dropping Indexes
+### 🔸 Creating and Dropping Indexes
 
-### ➕ Create an Index
+###  Create an Index
 
 ```sql
 -- Single-column index
