@@ -139,44 +139,44 @@ ALTER TABLE employees DROP COLUMN join_date;
 ```sql
 DROP TABLE employees;
 ```
-### 4. Filtering Data
+### 7. Filtering Data
 
 Filtering is used to retrieve only the specific rows that meet certain criteria using clauses like `WHERE`, `AND`, `OR`, `BETWEEN`, `IN`, and more.
 
-####  WHERE – Basic filtering condition:
+- ####  WHERE – Basic filtering condition:
 ```sql
 SELECT * FROM employees WHERE age > 30;
 
 ```
-####  AND / OR – Combine multiple conditions:
+- ####  AND / OR – Combine multiple conditions:
 ```sql
 SELECT * FROM employees WHERE age > 25 AND salary > 50000;
 SELECT * FROM employees WHERE dept_id = 1 OR dept_id = 2;
 
 ```
-####  BETWEEN – Match a range of values:
+- ####  BETWEEN – Match a range of values:
 ```sql
 SELECT * FROM employees WHERE salary BETWEEN 40000 AND 70000;
 
 ```
 
-#### IN – Match against a list of values:
+- #### IN – Match against a list of values:
 ```sql
 SELECT * FROM employees WHERE dept_id IN (1, 3, 5);
 
 ```
-#### NOT IN – Exclude from a list:
+- #### NOT IN – Exclude from a list:
 ```sql
 SELECT * FROM employees WHERE dept_id NOT IN (2, 4);
 
 ```
-#### LIKE – Pattern matching for strings:
+- #### LIKE – Pattern matching for strings:
 ```sql
 SELECT * FROM employees WHERE emp_name LIKE 'A%';   -- Starts with A
 SELECT * FROM employees WHERE emp_name LIKE '%son'; -- Ends with 'son'
 
 ```
-####  IS NULL / IS NOT NULL – Filter NULL values:
+- ####  IS NULL / IS NOT NULL – Filter NULL values:
 ```sql
 SELECT * FROM employees WHERE salary IS NOT NULL;
 
