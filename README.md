@@ -237,7 +237,7 @@ CREATE FULLTEXT INDEX index_name ON table_name(text_column);
 
 - Unique indexes prevent duplicate values in the indexed column(s)
 
-- Full-text indexes are optimized for MATCH() AGAINST() queries on large text fields
+- Full-text indexes are optimized for ```MATCH() AGAINST()``` queries on large text fields
 
 - Index order matters in composite indexes (leftmost prefix principle)
   
@@ -254,7 +254,7 @@ ALTER TABLE table_name DROP PRIMARY KEY;
 - Primary Key indexes cannot be dropped with DROP INDEX (use ALTER TABLE)
 
 - Dropping a non-existent index throws an error (check existence first)
-- 
+  
 ---
 
 ## 🔹 Views
