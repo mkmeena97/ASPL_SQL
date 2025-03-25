@@ -200,16 +200,39 @@ CREATE TABLE users (
 
 ---
 
-## 🔹 Indexing
-Indexes improve the performance of SELECT queries, especially on large datasets.
-```sql
-CREATE INDEX idx_salary ON employees(salary);
-DROP INDEX idx_salary ON employees;
-```
-- Indexes can be single-column or multi-column.
-- Can significantly speed up lookups, joins, and WHERE conditions.
-- Too many indexes can slow down INSERT/UPDATE operations.
+# 🔹 Indexes in MySQL
 
+Indexes in MySQL are used to speed up the retrieval of rows from a table. They help optimize queries that use `SELECT`, `JOIN`, `WHERE`, `ORDER BY`, and `GROUP BY`. While indexes improve read performance, they can slightly degrade write performance (like `INSERT`, `UPDATE`, `DELETE`) due to the overhead of maintaining the index structure.
+
+---
+
+## Why Use Indexes?
+- Improve the speed of data retrieval
+- Enhance performance of queries with conditions and joins
+- Enforce uniqueness using `UNIQUE` or `PRIMARY KEY`
+- Reduce disk I/O for large tables
+
+> ⚠️ **Note:** Overusing indexes can negatively impact write operations.
+
+---
+
+## 🔸 Creating and Dropping Indexes
+
+### ➕ Create an Index
+
+```sql
+-- Single-column index
+CREATE INDEX index_name ON table_name(column_name);
+
+-- Composite index (multiple columns)
+CREATE INDEX index_name ON table_name(col1, col2, ...);
+
+-- Unique index (enforce uniqueness)
+CREATE UNIQUE INDEX index_name ON table_name(column_name);
+
+-- Full-text index (for text-based searches)
+CREATE FULLTEXT INDEX index_name ON table_name(text_column);
+```
 ---
 
 ## 🔹 Views
